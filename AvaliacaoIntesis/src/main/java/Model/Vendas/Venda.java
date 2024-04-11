@@ -5,6 +5,20 @@
 package Model.Vendas;
 ;
 
+import DAO.Vendas.Venda_ProdutoDAO;
+import Model.Produtos.Venda_Produtos;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Date;
+import java.util.Date;
+import java.util.Date;
+import Model.Produtos.Venda_Produtos;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Date;
+import java.util.Date;
 import java.util.Date;
 
 /**
@@ -19,6 +33,8 @@ public class Venda {
     private Date dataVenda;
     private String formaPagamento;
     private int quantidadeDeProduto;
+    private List<Venda_Produtos> listVP = new ArrayList<>();
+
 
     
     public java.sql.Date dateJavaParaSQL(java.util.Date dataJava){
@@ -26,6 +42,7 @@ public class Venda {
         java.sql.Date dateSQL = new java.sql.Date(date.getTime());
         return dateSQL;
     }
+    
     
     /**
      * @return the id
@@ -109,6 +126,20 @@ public class Venda {
      */
     public void setQuantidadeDeProduto(int quantidadeDeProduto) {
         this.quantidadeDeProduto = quantidadeDeProduto;
+    }
+
+    /**
+     * @return the listVP
+     */
+    public List<Venda_Produtos> getListVP() {
+        return listVP;
+    }
+
+    /**
+     * @param listVP the listVP to set
+     */
+    public void setListVP(List<Venda_Produtos> listVP) {
+        this.listVP = listVP;
     }
     
     

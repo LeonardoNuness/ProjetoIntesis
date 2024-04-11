@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
  */
 public class UsuarioDAO {
     
-    public boolean login(String user, String pass){
+    public boolean login(String login, String pass){
         Connection conexao = Conexao.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -27,18 +27,15 @@ public class UsuarioDAO {
         
         
         try {
-            stmt = conexao.prepareStatement("SELECT * FROM usuarios WHERE user=? and pass=?");
-            stmt.setString(1,user);
-            stmt.setString(2,pass);
-            
+            stmt = conexao.prepareStatement("SELECT login,pass FROM usuarios WHERE login= '" + login + "' and pass= '" + pass + "'");
             rs = stmt.executeQuery();
             
-            if(rs.next()){
+            while(rs.next()){
                 check = true;              
             }
             
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao ler os produtos: \n" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro: \n" + ex.getMessage());
         } finally {
             Conexao.closeConnection(conexao, stmt, rs);
         }

@@ -24,7 +24,9 @@ import javax.swing.table.TableRowSorter;
  * @author Leonardo
  */
 public class TelaVenda extends javax.swing.JFrame {
-
+    
+    int idVenda;
+    
     /**
      * Creates new form TelaVvenda
      */
@@ -32,6 +34,8 @@ public class TelaVenda extends javax.swing.JFrame {
         initComponents();
         DefaultTableModel model = (DefaultTableModel) tblProdutos.getModel();
         tblProdutos.setRowSorter(new TableRowSorter (model));
+        
+        
 
         fillTable();
         fillClientes();
@@ -58,6 +62,32 @@ public class TelaVenda extends javax.swing.JFrame {
         DefaultComboBoxModel comboBoxCliente = new DefaultComboBoxModel(clientes.toArray());
         cmbCliente.setModel(comboBoxCliente);
     }
+    
+     public void fillCarrinhoVenda(int idVenda){
+        DefaultTableModel model = (DefaultTableModel) tblCarrinho.getModel();
+        model.setNumRows(0);
+        
+        btnFinaliza.setText("Atualizar Venda");
+        
+        List<Venda_Produtos> listVP = new ArrayList<>();
+        Venda_ProdutoDAO vpDAO = new Venda_ProdutoDAO();
+        listVP = vpDAO.readProdutos(idVenda);
+        
+        
+        for(Venda_Produtos vp: listVP){
+            int quant = vp.getQuantidade();
+            Double preco = vp.getPreco();
+            Double total = preco*quant;
+            model.addRow(new Object[]{
+                vp.getNome(),
+                vp.getQuantidade(),
+                vp.getPreco(),
+                total,
+            });
+        }
+        
+        calculaTotal();
+     }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -71,7 +101,7 @@ public class TelaVenda extends javax.swing.JFrame {
         lblClientes = new javax.swing.JLabel();
         cmbCliente = new javax.swing.JComboBox<>();
         btnFinaliza = new javax.swing.JButton();
-        txtTotalaVenda = new javax.swing.JTextField();
+        txtTotalVenda = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProdutos = new javax.swing.JTable();
@@ -89,14 +119,14 @@ public class TelaVenda extends javax.swing.JFrame {
 
         lblClientes.setText("Cliente");
 
-        btnFinaliza.setText("Finaliza Venda");
+        btnFinaliza.setText("Finalizar Venda");
         btnFinaliza.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFinalizaActionPerformed(evt);
             }
         });
 
-        txtTotalaVenda.setEnabled(false);
+        txtTotalVenda.setEnabled(false);
 
         jLabel2.setText("R$");
 
@@ -225,7 +255,7 @@ public class TelaVenda extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtTotalaVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtTotalVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnFinaliza)
                                 .addGap(13, 13, 13))
@@ -269,7 +299,7 @@ public class TelaVenda extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnFinaliza)
-                        .addComponent(txtTotalaVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTotalVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnCancelar)
@@ -350,10 +380,10 @@ public class TelaVenda extends javax.swing.JFrame {
         {
         
         DefaultTableModel model = (DefaultTableModel) tblCarrinho.getModel();
-        
+        String nome = tblCarrinho.getValueAt(line, 0).toString();
         int choice = 0;
         Object[] opcoes = {"Sim", "Nao"};
-            choice = JOptionPane.showOptionDialog(null, "Deseja remover esse produto do carrinho?", "Alerta de exclusao", 
+            choice = JOptionPane.showOptionDialog(null, "Deseja remover " + nome + " do carrinho?", "Alerta de exclusao", 
                     JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, 
                     opcoes, opcoes[0]);
             
@@ -374,9 +404,30 @@ public class TelaVenda extends javax.swing.JFrame {
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         // TODO add your handling code here:
-        TelaEscolhaParaVenda tela = new TelaEscolhaParaVenda();
-        tela.show();
-        this.dispose();
+        int numberOfLinesCarrinho = tblCarrinho.getRowCount();
+        if(numberOfLinesCarrinho!=0){
+        int choice = 0;
+        Object[] opcoes = {"Sim", "Nao"};
+            choice = JOptionPane.showOptionDialog(null, "Se voltar a venda sera cancelada \n Deseja voltar?", "Alerta de cancelamento", 
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, 
+                    opcoes, opcoes[0]);
+            
+        switch(choice){
+            case 0:
+                TelaEscolhaParaVenda tela = new TelaEscolhaParaVenda();
+                tela.show();
+                this.dispose();
+                break;
+            case 1:
+                break;
+        }
+        }
+        else
+        {
+            TelaEscolhaParaVenda tela = new TelaEscolhaParaVenda();
+            tela.show();
+            this.dispose();
+        }
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void btnFinalizaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizaActionPerformed
@@ -387,15 +438,35 @@ public class TelaVenda extends javax.swing.JFrame {
         }
         else
         {
+        if(btnFinaliza.getText().equals("Finalizar Venda")){
+        
             save();
             changeTela();
+
+        }
+        else
+        {
+            Venda_ProdutoDAO vpDAO = new Venda_ProdutoDAO();
+            idVenda = getIdTela();
+            vpDAO.deleteProdutos(idVenda);
+            saveProdutos(idVenda);
+            JOptionPane.showMessageDialog(null, "A venda foi atualizada");
+            changeTela();
+            btnFinaliza.setText("Finalizar Venda");
+            txtTotalVenda.setText("");
+        }
         }
         
         cleanTableCarrinho();
-        
-        
     }//GEN-LAST:event_btnFinalizaActionPerformed
 
+    public void setIdTela(int idVenda){
+        this.idVenda = idVenda;
+    }
+    public int getIdTela(){
+        return idVenda;
+    }
+    
     public void changeTela(){
         int choice = 0;
         Object[] opcoes = {"Sim", "Nao"};
@@ -444,16 +515,42 @@ public class TelaVenda extends javax.swing.JFrame {
             totalResult += value;
         }
         
-        txtTotalaVenda.setText(String.valueOf(totalResult));
+        txtTotalVenda.setText(String.valueOf(totalResult));
     }
     
     public void save(){
         saveVenda();
         saveProdutos();
-        
     }
     
     public void saveProdutos(){
+        int numberOfLines = tblCarrinho.getRowCount();
+        int line;
+        String nome;
+        Double preco;
+        int quant;
+        int id;
+        
+        Venda_ProdutoDAO vpDAO = new Venda_ProdutoDAO();
+        List<Venda_Produtos> listVendaProdutos = new ArrayList<>();
+        Venda_Produtos vp = new Venda_Produtos();
+        
+        for(line=0;line<numberOfLines;line++){
+            nome = tblCarrinho.getValueAt(line,0).toString();
+            preco = Double.parseDouble(String.valueOf(tblCarrinho.getValueAt(line,2)));
+            quant = Integer.parseInt(String.valueOf(tblCarrinho.getValueAt(line,1)));
+            
+            vp.setIdvenda(vpDAO.ultimaVenda());
+            vp.setNome(nome);
+            vp.setPreco(preco);
+            vp.setQuantidade(quant);
+            
+            vpDAO.createVendaProdutos(vp);
+        }
+
+    }
+    
+    public void saveProdutos(int id){
         int numberOfLines = tblCarrinho.getRowCount();
         int line;
         String nome;
@@ -469,18 +566,13 @@ public class TelaVenda extends javax.swing.JFrame {
             preco = Double.parseDouble(String.valueOf(tblCarrinho.getValueAt(line,2)));
             quant = Integer.parseInt(String.valueOf(tblCarrinho.getValueAt(line,1)));
             
-            //vp.setId();
+            vp.setIdvenda(id);
             vp.setNome(nome);
             vp.setPreco(preco);
             vp.setQuantidade(quant);
             
-            listVendaProdutos.add(vp);
+            vpDAO.createVendaProdutos(vp);
         }
-        
-        vpDAO.createVendaProdutos(listVendaProdutos);
-        
-        
-        
     }
     
     public void saveVenda(){
@@ -492,7 +584,7 @@ public class TelaVenda extends javax.swing.JFrame {
         Date d = new Date();
         
         try{
-            v.setTotalVenda(Double.parseDouble(txtTotalaVenda.getText()));
+            v.setTotalVenda(Double.parseDouble(txtTotalVenda.getText()));
             v.setDataVenda(d);
             v.setFormaPagamento(formaPagamento);
             v.setCliente(idCliente);
@@ -505,7 +597,7 @@ public class TelaVenda extends javax.swing.JFrame {
     
     public String formaDePagamento(){
         String formaPagamento = null;
-        Object[] opcoes = { "Pix", "Debito", "Credito", "VA" };
+        Object[] opcoes = { "Pix", "Debito", "Credito", "Vale" };
             int formaEscolhida = JOptionPane.showOptionDialog(null, "Qual a forma de pagamento", "Forma de pagamento", 
                     JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, 
                     opcoes, opcoes[0]);
@@ -528,6 +620,8 @@ public class TelaVenda extends javax.swing.JFrame {
         }
         return formaPagamento;
     }
+    
+   
     
     /**
      * @param args the command line arguments
@@ -582,6 +676,6 @@ public class TelaVenda extends javax.swing.JFrame {
     private javax.swing.JTable tblCarrinho;
     private javax.swing.JTable tblProdutos;
     private javax.swing.JTextField txtQuantidade;
-    private javax.swing.JTextField txtTotalaVenda;
+    private javax.swing.JTextField txtTotalVenda;
     // End of variables declaration//GEN-END:variables
 }

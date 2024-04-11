@@ -4,6 +4,9 @@
  */
 package Model.Produtos;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Leonardo
@@ -13,7 +16,8 @@ public class Venda_Produtos {
     private int idvenda;
     private String nome;
     private int quantidade;
-    private Double preco;
+    private Double preco;    
+    
 
     /**
      * @return the quantidade
@@ -70,6 +74,11 @@ public class Venda_Produtos {
     public void setIdvenda(int idvenda) {
         this.idvenda = idvenda;
     }
+
+    /**
+     * @return the listVP
+     */
+   
     
     
     

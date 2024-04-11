@@ -39,7 +39,7 @@ public class VendaDAO {
             
             JOptionPane.showMessageDialog(null, "Venda executada com sucesso");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao salvar o produto: \n" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao salvar: \n" + ex.getMessage());
         } finally {
             Conexao.closeConnection(conexao, stmt);
         }
@@ -59,7 +59,7 @@ public class VendaDAO {
             
             JOptionPane.showMessageDialog(null, "A venda foi excluida com sucesso");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao exlcuir a ven: \n" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao excluir a venda: \n" + ex.getMessage());
         } finally {
             Conexao.closeConnection(conexao, stmt);
         }
@@ -109,10 +109,9 @@ public class VendaDAO {
         String nomeCliente = null;
         
         try {
-            stmt = conexao.prepareStatement("SELECT * FROM clientes WHERE idcliente=?");
-            stmt.setInt(1,v.getId());
+            stmt = conexao.prepareStatement("SELECT nome FROM clientes WHERE idcliente=?");
+            stmt.setInt(1,v.getCliente());
             rs = stmt.executeQuery();
-            
             while(rs.next()){
                 nomeCliente = rs.getString("nome");
             }

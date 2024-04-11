@@ -5,6 +5,7 @@
 package View;
 
 import DAO.Pessoas.UsuarioDAO;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
 /**
@@ -52,7 +53,7 @@ public class TelaLogin extends javax.swing.JFrame {
 
         lblUserShow.setText("(Intesis)");
 
-        lblPassShow.setText("(123)");
+        lblPassShow.setText("(1234)");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -65,14 +66,14 @@ public class TelaLogin extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblPass)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
                                 .addComponent(lblPassShow))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblUser)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(lblUserShow))
                             .addComponent(txtUser)
-                            .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)))
+                            .addComponent(txtPass)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(84, 84, 84)
                         .addComponent(btnLogin)))
@@ -104,20 +105,20 @@ public class TelaLogin extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
         String user = txtUser.getText();
-        String pass = txtPass.getText();
+        String pass = new String(txtPass.getPassword()).trim();
         
         UsuarioDAO userDAO = new UsuarioDAO();
         
-        //if(userDAO.login(user,pass)){ 
+        if(userDAO.login(user,pass)==true){ 
         TelaInicio tela = new TelaInicio();
         tela.show();
         this.dispose();
-       // }
-        //else
-       // {
-        //    JOptionPane.showMessageDialog(null,"Usuario ou senha incorretos");
-       // }
-        
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null,"Usuario ou senha incorretos");
+        }
+         
        
     }//GEN-LAST:event_btnLoginActionPerformed
 

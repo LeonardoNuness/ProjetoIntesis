@@ -7,7 +7,13 @@ package View.Vendas;
 import View.Vendas.TelaEscolhaParaVenda;
 import javax.swing.table.DefaultTableModel;
 import DAO.Vendas.VendaDAO;
+import DAO.Vendas.Venda_ProdutoDAO;
+import Model.Produtos.Venda_Produtos;
 import Model.Vendas.Venda;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -133,10 +139,17 @@ public class TelaVendasFeitas extends javax.swing.JFrame {
         int line = tblVendas.getSelectedRow();
         int id = Integer.parseInt(String.valueOf(tblVendas.getValueAt(line, 0)));
         
+        if(line==(-1)){
+        JOptionPane.showMessageDialog(null,"Escolha alguma venda para ser excluida");
+        }
+        else
+        {
         VendaDAO vDAO = new VendaDAO();
-        
+        Venda_ProdutoDAO vpDAO = new Venda_ProdutoDAO();
+        vpDAO.deleteProdutos(id);
         vDAO.deleteVenda(id);
         
+        }
         fillVendas();
     }//GEN-LAST:event_btnExcluirClienteActionPerformed
 
@@ -149,13 +162,25 @@ public class TelaVendasFeitas extends javax.swing.JFrame {
 
     private void tblVendasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVendasKeyPressed
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_tblVendasKeyPressed
+        int line = tblVendas.getSelectedRow();
+        int id = Integer.parseInt(tblVendas.getValueAt(line, 0).toString());
 
+        Venda_Produtos vp = new Venda_Produtos();
+        vp.setIdvenda(id);
+        
+        TelaVenda tela = new TelaVenda();
+        tela.fillCarrinhoVenda(id);
+        tela.setIdTela(id);
+        tela.show();
+        this.dispose();
+    }//GEN-LAST:event_tblVendasKeyPressed
+        
     private void fillVendas() {
         DefaultTableModel model = (DefaultTableModel) tblVendas.getModel();
         model.setNumRows(0);
         VendaDAO vDAO = new VendaDAO();
+        SimpleDateFormat formatacao = new SimpleDateFormat("dd'/'MM '/'yyyy");
+        
         
         
         for(Venda v: vDAO.readTabelaVenda()){
@@ -163,7 +188,7 @@ public class TelaVendasFeitas extends javax.swing.JFrame {
                 v.getId(),
                 vDAO.clienteForId(v),
                 v.getTotalVenda(),
-                v.getDataVenda(),
+                formatacao.format(v.getDataVenda()),
                 v.getFormaPagamento()
                 
             });

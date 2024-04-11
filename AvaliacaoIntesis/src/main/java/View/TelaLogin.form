@@ -30,16 +30,16 @@
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="lblPass" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <EmptySpace pref="98" max="32767" attributes="0"/>
                               <Component id="lblPassShow" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <Component id="lblUser" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Component id="lblUserShow" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="txtUser" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtPass" alignment="0" pref="183" max="32767" attributes="0"/>
+                          <Component id="txtPass" alignment="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -105,7 +105,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblPassShow">
       <Properties>
-        <Property name="text" type="java.lang.String" value="(123)"/>
+        <Property name="text" type="java.lang.String" value="(1234)"/>
       </Properties>
     </Component>
   </SubComponents>
