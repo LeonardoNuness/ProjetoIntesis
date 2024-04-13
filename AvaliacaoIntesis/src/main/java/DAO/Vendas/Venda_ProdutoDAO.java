@@ -82,7 +82,6 @@ public class Venda_ProdutoDAO {
         ResultSet rs = null;
         
         List<Venda_Produtos> listProdutos = new ArrayList<>();
-        Venda_Produtos vp = new Venda_Produtos();
         
         try{
             stmt = conexao.prepareStatement("SELECT * FROM vendas_produtos where idvendaproduto = ?");
@@ -91,6 +90,9 @@ public class Venda_ProdutoDAO {
             rs = stmt.executeQuery();
             
             while(rs.next()){
+                
+                Venda_Produtos vp = new Venda_Produtos();
+                
                 vp.setIdvenda(idVenda);
                 vp.setNome(rs.getString("produto"));
                 vp.setPreco(rs.getDouble("preco"));
